@@ -1,6 +1,7 @@
 package com.example.myapplication2.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
+
+        Log.d("D_LIFECYCLE", "Home Fragment onCreateView");
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

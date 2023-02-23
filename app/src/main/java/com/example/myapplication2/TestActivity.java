@@ -1,6 +1,7 @@
 package com.example.myapplication2;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,4 +39,15 @@ public class TestActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("D_LIFECYCLE", "TestActivity onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("D_LIFECYCLE", "TestActivity onResume");
+    }
 }
