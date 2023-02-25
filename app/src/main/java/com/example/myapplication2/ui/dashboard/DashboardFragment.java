@@ -24,7 +24,7 @@ public class DashboardFragment extends Fragment {
         DashboardViewModel dashboardViewModel =
                 new ViewModelProvider(this).get(DashboardViewModel.class);
 
-        Log.d("D_LIFECYCLE", "Dashboard Fragment onCreateView");
+        Log.i("D_LIFECYCLE", FRAGMENT_NAME + " onCreateView");
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

@@ -20,6 +20,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("D_LIFECYCLE", "TestActivity onCreate");
 
         binding = ActivityTestBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
