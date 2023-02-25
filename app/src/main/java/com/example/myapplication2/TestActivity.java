@@ -40,9 +40,9 @@ public class TestActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("D_LIFECYCLE", "TestActivity onPause");
+    protected void onStart() {
+        super.onStart();
+        Log.d("D_LIFECYCLE", "TestActivity onStart");
     }
 
     @Override
@@ -50,4 +50,23 @@ public class TestActivity extends AppCompatActivity {
         super.onResume();
         Log.d("D_LIFECYCLE", "TestActivity onResume");
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("D_LIFECYCLE", "TestActivity onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("D_LIFECYCLE", "TestActivity onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("D_LIFECYCLE", "TestActivity onDestroy");
+    }
+
 }
