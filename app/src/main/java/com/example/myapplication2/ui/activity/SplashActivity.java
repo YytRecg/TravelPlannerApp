@@ -1,11 +1,12 @@
-package com.example.myapplication2;
+package com.example.myapplication2.ui.activity;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.myapplication2.R;
 
 public class SplashActivity extends AppCompatActivity {
 
