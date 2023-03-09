@@ -1,5 +1,6 @@
 package com.example.myapplication2.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.myapplication2.R;
+import com.example.myapplication2.Utility;
+import com.example.myapplication2.ui.activity.TestActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -45,7 +48,7 @@ public class LoginFragment extends Fragment {
         progressBar = v.findViewById(R.id.account_progressbar);
 
         createAccBtn.setOnClickListener(view -> onCreateAccount());
-        loginAccBtn.setOnClickListener(view -> getActivity().finish());
+        loginAccBtn.setOnClickListener(view -> onLoginAccount());
 
         return v;
     }
@@ -64,13 +67,41 @@ public class LoginFragment extends Fragment {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            setProgressBarVisibility(false);
-            if (task.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Please verify your email!", Toast.LENGTH_SHORT).show();
+                setProgressBarVisibility(false);
+                if (task.isSuccessful()) {
+                    Utility.showToast(getActivity(), "Please verify your email!");
                     firebaseAuth.getCurrentUser().sendEmailVerification();
                     firebaseAuth.signOut();
                 } else {
-                    Toast.makeText(getActivity(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Utility.showToast(getActivity(), task.getException().getLocalizedMessage());
+                }
+            }
+        );
+    }
+
+    private void onLoginAccount() {
+        String email = emailEt.getText().toString();
+        String password = passwordEt.getText().toString();
+
+        if (!validateData(email, password)) {return;}
+
+        loginAccountInFirebase(email, password);
+    }
+
+    private void loginAccountInFirebase(String email, String password) {
+        setProgressBarVisibility(true);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                setProgressBarVisibility(false);
+                if (task.isSuccessful()) {
+                    if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                        startActivity(new Intent(getActivity(), TestActivity.class));
+                    } else {
+                        Utility.showToast(getActivity(), "You need to verify your email!");
+                    }
+                } else {
+                    Utility.showToast(getActivity(), task.getException().getLocalizedMessage());
                 }
             }
         );
