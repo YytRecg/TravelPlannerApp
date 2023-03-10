@@ -11,4 +11,5 @@
     <string name="input_password">Password</string>
     <string name="button_loginUser">Login</string>
     <string name="button_createUser">Create Account</string>
+    <string name="logout">Logout</string>
 </resources>
