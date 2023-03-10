@@ -1,8 +1,9 @@
-package com.example.myapplication2;
+package com.example.myapplication2.ui.activity;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.myapplication2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +29,12 @@ public class TestActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-//                .build();
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                .build();
 
         // M: this line below adds the Back Arrow to the nav layout
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder().build();
+//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder().build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_test);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

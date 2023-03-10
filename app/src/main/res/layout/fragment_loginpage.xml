@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".ui.activity.LoginActivity">
 
     <EditText
-        android:id="@+id/username_text"
+        android:id="@+id/email_id"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="450dp"
-        android:autofillHints="username"
-        android:hint="@string/input_username"
-        android:inputType="text"
+        android:autofillHints="email"
+        android:background="@drawable/rounded_corner"
+        android:hint="@string/input_email"
+        android:inputType="textEmailAddress"
         android:minHeight="48dp"
+        android:padding="10dp"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".5"
@@ -31,16 +33,17 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="@+id/username_text"
+        android:background="@drawable/rounded_corner"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/email_id"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/username_text"
-        app:layout_constraintTop_toBottomOf="@+id/username_text" />
+        app:layout_constraintStart_toStartOf="@+id/email_id"
+        app:layout_constraintTop_toBottomOf="@+id/email_id" />
 
     <Button
         android:id="@+id/new_user_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:onClick="launchMain"
         android:layout_marginTop="16dp"
         android:text="@string/button_createUser"
         app:layout_constraintEnd_toEndOf="@+id/password_text"
@@ -52,7 +55,6 @@
         android:id="@+id/login_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:onClick="launchTest"
         android:text="@string/button_loginUser"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/new_user_button"
@@ -60,5 +62,14 @@
         app:layout_constraintStart_toStartOf="@+id/new_user_button"
         app:layout_constraintTop_toBottomOf="@+id/new_user_button"
         app:layout_constraintVertical_bias="0.063" />
+
+    <ProgressBar
+        android:id="@+id/account_progressbar"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_button"
+        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
