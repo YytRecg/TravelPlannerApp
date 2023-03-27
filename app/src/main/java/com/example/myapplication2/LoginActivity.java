@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
-import com.google.firebase.database.*;
-
-import com.google.firebase.*;
-
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -26,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void launchTest(View v) {
-        Intent i = new Intent(this, TestActivity2.class);
+        Intent i = new Intent(this, UserInfoActivity.class);
         startActivity(i);
     }
 

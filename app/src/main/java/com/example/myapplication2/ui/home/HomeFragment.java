@@ -16,7 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication2.databinding.FragmentHomeBinding;
 
 import com.google.firebase.database.*;
+import com.google.android.gms.tasks.*;
 
+import java.util.*;
 
 public class HomeFragment extends Fragment {
 
@@ -35,33 +37,16 @@ public class HomeFragment extends Fragment {
         final Button searchButton = binding.searchButton;
         final EditText userDestination = binding.editTextDestination;
 
-        searchButton.setOnClickListener(view -> {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("users");
-//
-//            myRef.push();
-//            try {
-//                myRef.child(userDestination.getText().toString()).getKey();
-//            }
-//            catch(Exception e) {
-//                myRef.push();
-//            }
-
-            myRef.child("1").child("name").setValue(userDestination.getText().toString());
-//            myRef.child("users").child(1).child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                    if (!task.isSuccessful()) {
-//                        Log.e("firebase", "Error getting data", task.getException());
-//                    }
-//                    else {
-//                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
-//                    }
-//                }
-//            });
-        });
-
         return root;
+    }
+
+    private void writeNewPost(DatabaseReference myRef, String userBio, String username, String photo) {
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/bio/", userBio);
+        childUpdates.put("/name/", username);
+        childUpdates.put("/photo/", photo);
+        myRef.push().updateChildren(childUpdates);
     }
 
     @IgnoreExtraProperties
