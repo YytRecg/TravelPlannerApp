@@ -22,8 +22,9 @@
             </intent-filter>
         </activity>
 
+
         <activity
-            android:name=".ui.activity.TestActivity2"
+            android:name=".ui.activity.UserInfoActivity"
             android:exported="false"
             android:parentActivityName=".ui.activity.LoginActivity" />
 
