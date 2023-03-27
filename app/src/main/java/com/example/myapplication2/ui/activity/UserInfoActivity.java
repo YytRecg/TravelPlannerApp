@@ -1,4 +1,4 @@
-package com.example.myapplication2;
+package com.example.myapplication2.ui.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,10 +17,9 @@ import java.util.Map;
 
 import android.os.Bundle;
 
+import com.example.myapplication2.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 public class UserInfoActivity extends AppCompatActivity {
 
