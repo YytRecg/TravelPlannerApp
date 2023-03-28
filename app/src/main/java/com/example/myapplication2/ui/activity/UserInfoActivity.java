@@ -20,6 +20,7 @@ import android.os.Bundle;
 import com.example.myapplication2.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -121,6 +122,8 @@ public class UserInfoActivity extends AppCompatActivity {
     private void readUserInfo(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String Uid = firebaseAuth.getUid();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         int year = Integer.parseInt(DOB.getText().toString().substring(6));
@@ -144,7 +147,7 @@ public class UserInfoActivity extends AppCompatActivity {
 //            e1.printStackTrace();
 //        }
         String strDate = dateFormat.format(date).toString();
-        writeNewPost(myRef, Username.getText().toString(), strDate);
+        writeNewPost(myRef, Username.getText().toString(), strDate, Uid);
 //        myRef.child("datetime").setValue(strDate);
 
 
@@ -173,13 +176,14 @@ public class UserInfoActivity extends AppCompatActivity {
 //            });
     }
 
-    private void writeNewPost(DatabaseReference myRef, String username, String userDOB) {
+    private void writeNewPost(DatabaseReference myRef, String username, String userDOB, String Uid) {
 
         Map<String, Object> childUpdates = new HashMap<>();
 //        childUpdates.put("/bio/", userBio);
         childUpdates.put("/name/", username);
         childUpdates.put("/DOB/", userDOB);
+        childUpdates.put("/Uid/", Uid);
 //        childUpdates.put("/photo/", photo);
-        myRef.push().updateChildren(childUpdates);
+        myRef.setValue(childUpdates);
     }
 }
