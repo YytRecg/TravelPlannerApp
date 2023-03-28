@@ -81,9 +81,9 @@ public class HomeFragment extends Fragment {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                         longitude.setText("Longitude: " + addresses.get(0).getLongitude());
                         latitude.setText("Latitude: " + addresses.get(0).getLatitude());
-                        address.setText("Longitude: " + addresses.get(0).getAddressLine(0));
-                        city.setText("Longitude: " + addresses.get(0).getLocality());
-                        country.setText("Longitude: " + addresses.get(0).getCountryName());
+                        address.setText("Address: " + addresses.get(0).getAddressLine(0));
+                        city.setText("City: " + addresses.get(0).getLocality());
+                        country.setText("Country: " + addresses.get(0).getCountryName());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
