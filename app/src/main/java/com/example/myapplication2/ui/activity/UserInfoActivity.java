@@ -184,6 +184,6 @@ public class UserInfoActivity extends AppCompatActivity {
         childUpdates.put("/DOB/", userDOB);
         childUpdates.put("/Uid/", Uid);
 //        childUpdates.put("/photo/", photo);
-        myRef.setValue(childUpdates);
+        myRef.push().updateChildren(childUpdates);
     }
 }
