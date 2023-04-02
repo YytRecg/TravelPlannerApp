@@ -1,5 +1,6 @@
 package com.example.myapplication2.ui.home;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,8 +23,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+
+import com.example.myapplication2.Utility;
 import com.example.myapplication2.databinding.FragmentHomeBinding;
 
+import com.example.myapplication2.ui.activity.GptActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.snackbar.Snackbar;
@@ -66,6 +70,7 @@ public class HomeFragment extends Fragment {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
         locationButton.setOnClickListener(v -> {
+
             getLastLocation();
         });
 
@@ -84,6 +89,11 @@ public class HomeFragment extends Fragment {
                         address.setText("Address: " + addresses.get(0).getAddressLine(0));
                         city.setText("City: " + addresses.get(0).getLocality());
                         country.setText("Country: " + addresses.get(0).getCountryName());
+                        Intent i = new Intent(this.getActivity(), GptActivity.class);
+                        String state = addresses.get(0).getAdminArea();
+                        String city = addresses.get(0).getLocality();
+                        i.putExtra("area", city + ", " + state);
+                        startActivity(i);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
