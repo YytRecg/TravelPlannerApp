@@ -66,6 +66,7 @@ public class LoginFragment extends Fragment {
         setProgressBarVisibility(true);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 setProgressBarVisibility(false);
                 if (task.isSuccessful()) {
