@@ -9,7 +9,7 @@
     <string name="input_username">Username</string>
     <string name="input_email">Email</string>
     <string name="input_password">Password</string>
-    <string name="input_destination">What is your name?</string>
+    <string name="input_destination">Any travel idea?</string>
     <string name="input_destination_autofill">ABC</string>
     <string name="button_loginUser">Login</string>
     <string name="button_createUser">Create Account</string>
