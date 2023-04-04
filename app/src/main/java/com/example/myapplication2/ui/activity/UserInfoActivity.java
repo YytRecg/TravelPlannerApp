@@ -18,8 +18,13 @@ import java.util.Map;
 import android.os.Bundle;
 
 import com.example.myapplication2.R;
+import com.example.myapplication2.UserData;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ValueEventListener;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -31,15 +36,39 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String Uid = firebaseAuth.getUid();
+
         DOB = (EditText)findViewById(R.id.userDOB_text);
         Username = (EditText)findViewById(R.id.name_text);
-
         Button createUserButton = (Button)findViewById(R.id.add_user_button);
+
+        final boolean[] hasProfile = {false};
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                hasProfile[0] = dataSnapshot.hasChild(Uid);
+                String nameData =  dataSnapshot.child(Uid).child("name").getValue(String.class);
+                Username.setText(nameData);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        
         createUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                readUserInfo();
-                showDialog("Finished!");
+                readUserInfo(myRef, Uid);
+                if (hasProfile[0]) {
+                    showDialog("Notification", "Changed profile!");
+                } else {
+                    showDialog("Notification","Added profile!");
+                }
             }
         });
         //add text changed listener
@@ -109,8 +138,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
 
     }
-    private void showDialog(String msg){
-        AlertDialog dialog = new AlertDialog.Builder(UserInfoActivity.this).setTitle("Notification").setMessage(msg).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    private void showDialog(String title, String msg){
+        AlertDialog dialog = new AlertDialog.Builder(UserInfoActivity.this).setTitle(title).setMessage(msg).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -118,9 +147,11 @@ public class UserInfoActivity extends AppCompatActivity {
         }).create();
         dialog.show();
     }
-    private void readUserInfo(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users");
+    private void readUserInfo(DatabaseReference myRef, String Uid){
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("users");
+//        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+//        String Uid = firebaseAuth.getUid();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         int year = Integer.parseInt(DOB.getText().toString().substring(6));
@@ -144,7 +175,8 @@ public class UserInfoActivity extends AppCompatActivity {
 //            e1.printStackTrace();
 //        }
         String strDate = dateFormat.format(date).toString();
-        writeNewPost(myRef, Username.getText().toString(), strDate);
+        writeUser(myRef, Username.getText().toString(), strDate, Uid);
+        
 //        myRef.child("datetime").setValue(strDate);
 
 
@@ -173,13 +205,11 @@ public class UserInfoActivity extends AppCompatActivity {
 //            });
     }
 
-    private void writeNewPost(DatabaseReference myRef, String username, String userDOB) {
 
-        Map<String, Object> childUpdates = new HashMap<>();
-//        childUpdates.put("/bio/", userBio);
-        childUpdates.put("/name/", username);
-        childUpdates.put("/DOB/", userDOB);
-//        childUpdates.put("/photo/", photo);
-        myRef.push().updateChildren(childUpdates);
+    private void writeUser(DatabaseReference myRef, String username, String userDOB, String Uid) {
+
+        Map<String, UserData> childUpdates = new HashMap<>();
+        myRef.child(Uid).setValue(new UserData(userDOB, username));
     }
+
 }

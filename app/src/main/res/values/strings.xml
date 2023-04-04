@@ -32,4 +32,10 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="loading">Loading... Please wait a second</string>
+
+    <string name="button_add_profile">Add Profile</string>
+    <string name="username">Username</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="no_user_profile_warning">No User Profile</string>
+    <string name="edit_user_profile_button">Edit User Profile</string>
 </resources>

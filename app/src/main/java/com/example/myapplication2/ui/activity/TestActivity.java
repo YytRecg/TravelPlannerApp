@@ -2,6 +2,7 @@ package com.example.myapplication2.ui.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.myapplication2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -14,9 +15,15 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.myapplication2.databinding.ActivityTestBinding;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class TestActivity extends AppCompatActivity {
 
     private ActivityTestBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,16 @@ public class TestActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_test);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+//        try {
+//            String imageUrl = UnsplashApiClient.getRandomLandmarkImageUrl();
+//            Glide.with(this).load(imageUrl).into(lmImageView);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
     }
+
 
     @Override
     protected void onStart() {

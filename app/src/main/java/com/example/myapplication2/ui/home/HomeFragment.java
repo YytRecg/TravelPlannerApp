@@ -1,6 +1,8 @@
 package com.example.myapplication2.ui.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,8 +25,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.example.myapplication2.FlickrAPI;
+import com.example.myapplication2.LMPhoto;
+import com.example.myapplication2.R;
 import android.Manifest;
-
 import com.example.myapplication2.Utility;
 import com.example.myapplication2.databinding.FragmentHomeBinding;
 
@@ -36,13 +42,21 @@ import com.google.android.gms.tasks.*;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    // Things for image generator
+    ImageView lmImageView;
 
-//    Thingies for get location
+    List<LMPhoto> lmPhotoList;
+    int currPhotoIdx = -1;
+
+    // Thingies for get location
     private FusedLocationProviderClient fusedLocationProviderClient;
     private TextView longitude, latitude, address, city, country;
     private Button locationButton;
@@ -58,9 +72,38 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         final Button searchButton = binding.searchButton;
+        final Button nextImgButton = binding.nextImgButton;
         final EditText userDestination = binding.editTextDestination;
 
-//        Thingies for get location
+        // Things for image generator
+        lmImageView = binding.homeImageView;
+//        FlickrAPI flickrAPI = new FlickrAPI(this);
+//        flickrAPI.fetchLMImages();
+
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FlickrAPI flickrAPI = new FlickrAPI(this);
+//                flickrAPI.fetchLMImages();
+//                nextImgButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        nextPhoto();
+//                    }
+//                });
+//            }
+//        });
+//
+        searchButton.setOnClickListener((View v) -> {
+            FlickrAPI flickrAPI = new FlickrAPI(this, userDestination.getText().toString());
+            flickrAPI.fetchLMImages();
+        });
+
+        nextImgButton.setOnClickListener((View v) -> {
+            nextPhoto();
+        });
+
+        // Thingies for get location
         longitude = binding.longitude;
         latitude = binding.latitude;
         address = binding.address;
@@ -76,6 +119,41 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+    public void receivedLMPhotos(List<LMPhoto> lmPhotoList) {
+        this.lmPhotoList = lmPhotoList;
+        nextPhoto();
+    }
+
+    private void nextPhoto() {
+        if (lmPhotoList != null && lmPhotoList.size() > 0){
+            currPhotoIdx++;
+            currPhotoIdx %= lmPhotoList.size();
+
+            LMPhoto lmPhoto = lmPhotoList.get(currPhotoIdx);
+
+//            Log.d("flickr", "current lmPhoto :"+lmPhoto.toString());
+            String imageUrl = lmPhoto.getPhotoURL();
+
+            Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(lmImageView);
+//            FlickrAPI flickrAPI = new FlickrAPI(this);
+//            flickrAPI.fetchPhotoBitmap(lmPhoto.getPhotoURL());
+        }
+    }
+
+//    private void openUnsplashPage(){
+//        Intent i = new Intent(getView().getContext(), UnsplashAuthActivity.class);
+//        startActivity(i);
+//    }
+
+
+//    public void receivedPhotoBitmap(Bitmap bitmap) {
+//        ImageView lmImageView = binding.homeImageView;
+//        lmImageView.setImageBitmap(bitmap);
+//    }
 
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

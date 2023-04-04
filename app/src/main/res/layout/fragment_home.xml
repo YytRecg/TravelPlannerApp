@@ -16,7 +16,7 @@
         android:textStyle="bold"
         android:paddingTop="10dp"
         android:id="@+id/location" />
-    
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,15 +29,16 @@
         android:id="@+id/longitude" />
 
     <TextView
+        android:id="@+id/latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/longitude"
         android:layout_below="@+id/longitude"
-        android:textSize="25sp"
-        android:paddingTop="10dp"
+        android:layout_marginTop="5dp"
         android:paddingStart="15dp"
+        android:paddingTop="10dp"
         android:paddingEnd="15dp"
-        android:id="@+id/latitude" />
+        android:text="@string/longitude"
+        android:textSize="25sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -72,30 +73,30 @@
         android:paddingEnd="15dp"
         android:id="@+id/country" />
 
+    <!-- separator -->
+
     <Button
         android:id="@+id/location_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/country"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
         android:text="@string/get_location" />
-
-<!-- separator -->
 
     <EditText
         android:id="@+id/editTextDestination"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@+id/location_button"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="159dp"
         android:layout_marginEnd="20dp"
-        android:gravity="center"
         android:autofillHints="@string/input_destination_autofill"
         android:ems="15"
+        android:gravity="center"
         android:hint="@string/input_destination"
         android:inputType="textPersonName"
         android:text="" />
@@ -106,17 +107,65 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextDestination"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="80dp"
         android:layout_marginBottom="10dp"
         android:text="@string/search" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/nextImgButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="362dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="455dp" />
+
+    <ImageView
+        android:id="@+id/homeImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="188dp"
+
+        android:layout_above="@+id/location_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="333dp"
+        android:layout_marginEnd="89dp"
+        android:layout_marginBottom="-223dp"
+        android:visibility="visible"
+        tools:src="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/nextImgButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/homeImageView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+
+        android:layout_marginStart="185dp"
+        android:layout_marginTop="223dp"
+        android:layout_marginEnd="188dp"
+        android:text="🔍"/>
+
 
     <!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/textInputLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
+    <!--        android:id="@+id/textInputLayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
 
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
 </RelativeLayout>
