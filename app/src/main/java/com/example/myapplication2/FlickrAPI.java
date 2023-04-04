@@ -30,12 +30,13 @@ public class FlickrAPI {
     static final String BASE_URL = "https://api.flickr.com/services/rest";
     static final String API_KEY = "d52bdd36015b29a7208efbb782c15875"; //bad practice: better to fetch from server
     static final String TAG = "FlickrTag";
-    static final String TAG_NAME = "Beach";
 
     HomeFragment homeFragment;
+    String TAG_NAME = "";
 
-    public FlickrAPI(HomeFragment homeFragment){
+    public FlickrAPI(HomeFragment homeFragment, String TAG_NAME){
         this.homeFragment = homeFragment;
+        this.TAG_NAME = TAG_NAME;
     }
 
     public void fetchLMImages(){

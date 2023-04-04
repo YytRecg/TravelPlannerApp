@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     ImageView lmImageView;
-    public static String userDestInput;
 
     List<LMPhoto> lmPhotoList;
     int currPhotoIdx = -1;
@@ -52,11 +51,10 @@ public class HomeFragment extends Fragment {
         final Button searchButton = binding.searchButton;
         final Button nextImgButton = binding.nextImgButton;
         final EditText userDestination = binding.editTextDestination;
-        this.userDestInput = userDestination.getText().toString();
 
         lmImageView = binding.homeImageView;
-        FlickrAPI flickrAPI = new FlickrAPI(this);
-        flickrAPI.fetchLMImages();
+//        FlickrAPI flickrAPI = new FlickrAPI(this);
+//        flickrAPI.fetchLMImages();
 
 //        searchButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -72,10 +70,10 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 //
-//        searchButton.setOnClickListener((View v) -> {
-//            FlickrAPI flickrAPI = new FlickrAPI(this);
-//            flickrAPI.fetchLMImages();
-//        });
+        searchButton.setOnClickListener((View v) -> {
+            FlickrAPI flickrAPI = new FlickrAPI(this, userDestination.getText().toString());
+            flickrAPI.fetchLMImages();
+        });
 
         nextImgButton.setOnClickListener((View v) -> {
             nextPhoto();
