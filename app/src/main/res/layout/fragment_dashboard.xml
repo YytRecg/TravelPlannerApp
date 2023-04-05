@@ -15,10 +15,9 @@
         android:text="@string/edit_user_profile_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.765" />
+        app:layout_constraintVertical_bias="0.814" />
 
     <TextView
         android:id="@+id/textViewName"
@@ -61,9 +60,20 @@
         android:text="Travel Plan List"
         app:layout_constraintBottom_toTopOf="@+id/user_info_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.268"
+        app:layout_constraintHorizontal_bias="0.199"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.622" />
+        app:layout_constraintVertical_bias="0.427" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_travel_plans"
+        android:layout_width="281dp"
+        android:layout_height="179dp"
+        app:layout_constraintBottom_toTopOf="@+id/user_info_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_travel_plans"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

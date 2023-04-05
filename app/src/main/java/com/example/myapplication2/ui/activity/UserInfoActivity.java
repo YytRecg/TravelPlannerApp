@@ -164,7 +164,7 @@ public class UserInfoActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
         Date date = cal.getTime();
-        System.out.print(date);
+//        System.out.print(date);
 
 
 //        try {

@@ -14,17 +14,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication2.MyAdapter;
+import com.example.myapplication2.TravelPlanData;
 import com.example.myapplication2.databinding.FragmentDashboardBinding;
 import com.example.myapplication2.ui.activity.UserInfoActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
 
 
     TextView name, birthday;
+    RecyclerView travelPlanList;
+    List<TravelPlanData> items = new ArrayList<>();
 
     private FragmentDashboardBinding binding;
     private static final String FRAGMENT_NAME = DashboardFragment.class.getSimpleName();
@@ -36,6 +45,7 @@ public class DashboardFragment extends Fragment {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users");
+        DatabaseReference planRef = database.getReference("travel_plans");
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String Uid = firebaseAuth.getUid();
 
@@ -49,6 +59,21 @@ public class DashboardFragment extends Fragment {
 
         name = binding.textViewName;
         birthday = binding.textViewBirthday;
+
+        //things for travel plan list recycler view
+        travelPlanList = binding.recyclerViewTravelPlans;
+
+//        items.add(new TravelPlanData(7, "Paris", ""));
+
+//        travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+//        travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
+        int days =  dataSnapshot.child(Uid).child("0").child("days").getValue(int.class);
+        String dest =  dataSnapshot.child(Uid).child("0").child("dest").getValue(String.class);
+        Log.d("D_travelPlans", Integer.toString(days));
+        items.add(new TravelPlanData(days, dest, ""));
+        travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
+
 
         userInfoButton.setOnClickListener((View v) -> {
             openUserInfoPage();
@@ -66,6 +91,32 @@ public class DashboardFragment extends Fragment {
                     openUserInfoPage();
                 }
             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        // things to display travel plans
+        planRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(Uid)) {
+                    Log.d("D_travelPlans", "can read!");
+                    int days =  dataSnapshot.child(Uid).child("0").child("days").getValue(int.class);
+                    String dest =  dataSnapshot.child(Uid).child("0").child("dest").getValue(String.class);
+                    Log.d("D_travelPlans", Integer.toString(days));
+                    items.add(new TravelPlanData(days, dest, ""));
+                    travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+                    travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
+
+
+                } else {
+                    openUserInfoPage();
+                }
+            }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
