@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="destination"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:layout_toEndOf="@id/travelPlanImage" />
 
     <TextView
@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="#days"
+        android:textSize="8dp"
         android:layout_toEndOf="@id/travelPlanImage"
         android:layout_below="@id/destination"/>
     <LinearLayout

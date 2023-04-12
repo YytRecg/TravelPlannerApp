@@ -1,5 +1,6 @@
 package com.example.myapplication2.ui.dashboard;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,19 +19,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication2.MyAdapter;
+import com.example.myapplication2.RecyclerViewInterface;
 import com.example.myapplication2.TravelPlanData;
 import com.example.myapplication2.databinding.FragmentDashboardBinding;
+import com.example.myapplication2.ui.activity.TravelPlanActivity;
 import com.example.myapplication2.ui.activity.UserInfoActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements RecyclerViewInterface {
 
-
-
+    int days;
+    String dest;
     TextView name, birthday;
     RecyclerView travelPlanList;
     List<TravelPlanData> items = new ArrayList<>();
@@ -62,17 +66,47 @@ public class DashboardFragment extends Fragment {
 
         //things for travel plan list recycler view
         travelPlanList = binding.recyclerViewTravelPlans;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity());
+        MyAdapter myAdapter = new MyAdapter(this.getActivity(), items, this);
 
 //        items.add(new TravelPlanData(7, "Paris", ""));
 
 //        travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 //        travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
-        int days =  dataSnapshot.child(Uid).child("0").child("days").getValue(int.class);
-        String dest =  dataSnapshot.child(Uid).child("0").child("dest").getValue(String.class);
-        Log.d("D_travelPlans", Integer.toString(days));
-        items.add(new TravelPlanData(days, dest, ""));
-        travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
+
+//        // Retrieve "days" data from Firebase
+//        planRef.child(Uid).child("1").child("days").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // Handle retrieved data
+//                days = dataSnapshot.getValue(int.class);
+//                System.out.println("Days: " + days);
+////                Log.d("D_travelPlans", Integer.toString(days));
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Handle database error
+//                System.err.println("Failed to retrieve data: " + databaseError.getMessage());
+//            }
+//        });
+//        planRef.child(Uid).child("1").child("dest").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // Handle retrieved data
+//                dest = dataSnapshot.getValue(String.class);
+////                System.out.println("Days: " + days);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Handle database error
+//                System.err.println("Failed to retrieve data: " + databaseError.getMessage());
+//            }
+//        });
+//
+////        Log.d("D_travelPlans", Integer.toString(days));
+//        System.out.println("Days!: " + days);
 
 
         userInfoButton.setOnClickListener((View v) -> {
@@ -98,31 +132,57 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        // things to display travel plans
         planRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(Uid)) {
-                    Log.d("D_travelPlans", "can read!");
-                    int days =  dataSnapshot.child(Uid).child("0").child("days").getValue(int.class);
-                    String dest =  dataSnapshot.child(Uid).child("0").child("dest").getValue(String.class);
-                    Log.d("D_travelPlans", Integer.toString(days));
-                    items.add(new TravelPlanData(days, dest, ""));
-                    travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-                    travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
-
-
+                    long count = dataSnapshot.child(Uid).getChildrenCount();
+                    System.out.println(count);
+                    for (int i = 1; i < count+1; i++) {
+                        Integer days =  dataSnapshot.child(Uid).child(Integer.toString(i)).child("days").getValue(Integer.class);
+                        String dest =  dataSnapshot.child(Uid).child(Integer.toString(i)).child("dest").getValue(String.class);
+                        String plans =  dataSnapshot.child(Uid).child(Integer.toString(i)).child("plans").getValue(String.class);
+                        items.add(new TravelPlanData(days, dest, plans));
+                    }
+                    System.out.println(items.toString());
+                    travelPlanList.setLayoutManager(linearLayoutManager);
+                    travelPlanList.setAdapter(myAdapter);
                 } else {
                     openUserInfoPage();
                 }
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+//        // things to display travel plans
+//        planRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.hasChild(Uid)) {
+//                    Log.d("D_travelPlans", "can read!");
+//                    int days =  dataSnapshot.child(Uid).child("0").child("days").getValue(int.class);
+//                    String dest =  dataSnapshot.child(Uid).child("0").child("dest").getValue(String.class);
+//                    Log.d("D_travelPlans", Integer.toString(days));
+//                    items.add(new TravelPlanData(days, dest, ""));
+//                    travelPlanList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+//                    travelPlanList.setAdapter(new MyAdapter(this.getActivity().getApplicationContext(), items));
+//
+//
+//                } else {
+//                    openUserInfoPage();
+//                }
+//            }
+
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                System.out.println("The read failed: " + databaseError.getCode());
+//            }
+//        });
 
 
 
@@ -145,6 +205,7 @@ public class DashboardFragment extends Fragment {
 
 //            final TextView textView = binding.textDashboard;
 //        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+//        items.add(new TravelPlanData(days, dest, ""));
         return root;
     }
 
@@ -200,6 +261,14 @@ public class DashboardFragment extends Fragment {
     public void onDestroy() {
         Log.i("D_LIFECYCLE", FRAGMENT_NAME +" onDestroy");
         super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent i = new Intent(getView().getContext(), TravelPlanActivity.class);
+        i.putExtra("DETAILS", items.get(position).getPlans());
+        startActivity(i);
+
     }
 
 //    @Override

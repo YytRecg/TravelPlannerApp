@@ -11,23 +11,25 @@ import com.example.myapplication2.R;
 public class TravelPlanActivity extends AppCompatActivity {
 
     private TextView travelPlanTextView;
-    private String des = "";
+//    private String des = "";
 
 
-    public void setDes(String des) {
-        this.des = des;
-    }
-    public String getDes() {
-        return des;
-    }
+//    public void setDes(String des) {
+//        this.des = des;
+//    }
+//    public String getDes() {
+//        return des;
+//    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_plan);
+
+        String travelPlanDetails = getIntent().getStringExtra("DETAILS");
         travelPlanTextView = findViewById(R.id.textView_travel_plan);
         travelPlanTextView.setMovementMethod(new ScrollingMovementMethod());
-        travelPlanTextView.setText(des);
+        travelPlanTextView.setText(travelPlanDetails);
     }
 }

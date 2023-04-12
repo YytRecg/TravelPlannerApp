@@ -4,7 +4,7 @@ public class TravelPlanData {
 
     public int days;
     public String dest;
-    public String plans = "";
+    public String plans;
 
     public TravelPlanData(int days, String dest, String plans) {
         this.days = days;
