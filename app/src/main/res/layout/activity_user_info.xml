@@ -46,11 +46,18 @@
         <EditText
             android:id="@+id/userDOB_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/DOB_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="JAN 01 2023"
+            android:textColor="@color/purple_200"
+            style="?android:spinnerStyle"/>
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

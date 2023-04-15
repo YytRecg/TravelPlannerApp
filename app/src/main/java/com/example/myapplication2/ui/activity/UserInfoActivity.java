@@ -3,6 +3,7 @@ package com.example.myapplication2.ui.activity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,8 +32,12 @@ import okhttp3.internal.Util;
 
 public class UserInfoActivity extends AppCompatActivity {
 
+    int G_day, G_month, G_year;
     EditText DOB;
     EditText Username;
+
+    private DatePickerDialog datePickerDialog;
+    private Button dateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,11 @@ public class UserInfoActivity extends AppCompatActivity {
         DOB = (EditText)findViewById(R.id.userDOB_text);
         Username = (EditText)findViewById(R.id.name_text);
         Button createUserButton = (Button)findViewById(R.id.add_user_button);
+        initDatePicker();
+        dateButton = (Button)findViewById(R.id.DOB_btn);
+
+        dateButton.setOnClickListener(v -> {datePickerDialog.show();});
+        dateButton.setText(getTodaysDate());
 
         final boolean[] hasProfile = {false};
 
@@ -142,6 +152,74 @@ public class UserInfoActivity extends AppCompatActivity {
 
     }
 
+    private String getTodaysDate() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        G_day = day;
+        G_month = month;
+        G_year = year;
+        month++;
+        return makeDateString(day, month, year);
+    }
+
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                G_day = dayOfMonth;
+                G_month = month;
+                G_year = year;
+                month++;
+                String date = makeDateString(dayOfMonth, month, year);
+                dateButton.setText(date);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = android.R.style.Theme_Holo_Light_Dialog;
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+    }
+
+    private String makeDateString(int dayOfMonth, int month, int year) {
+        return getMonthFormat(month) + " " + dayOfMonth + " " + year;
+//        return month + "/" + dayOfMonth + "/" + year;
+    }
+
+    private String getMonthFormat(int month) {
+        switch(month) {
+            case 1:
+                return "JAN";
+            case 2:
+                return "FEB";
+            case 3:
+                return "MAR";
+            case 4:
+                return "APR";
+            case 5:
+                return "MAY";
+            case 6:
+                return "JUN";
+            case 7:
+                return "JUL";
+            case 8:
+                return "AUG";
+            case 9:
+                return "SEP";
+            case 10:
+                return "OCT";
+            case 11:
+                return "NOV";
+            case 12:
+                return "DEC";
+        }
+        return "JAN";
+    }
+
     private void readUserInfo(DatabaseReference myRef, String Uid){
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("users");
@@ -149,9 +227,12 @@ public class UserInfoActivity extends AppCompatActivity {
 //        String Uid = firebaseAuth.getUid();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        int year = Integer.parseInt(DOB.getText().toString().substring(6));
-        int month = Integer.parseInt(DOB.getText().toString().substring(3, 5)) - 1;
-        int day = Integer.parseInt(DOB.getText().toString().substring(0, 2));
+//        int year = Integer.parseInt(DOB.getText().toString().substring(6));
+//        int month = Integer.parseInt(DOB.getText().toString().substring(3, 5)) - 1;
+//        int day = Integer.parseInt(DOB.getText().toString().substring(0, 2));
+        int year = G_year;
+        int month = G_month;
+        int day = G_day;
 
 //        int year = Integer.parseInt("1999");
 //        int month = Integer.parseInt("12")-1;
@@ -159,7 +240,7 @@ public class UserInfoActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day);
         Date date = cal.getTime();
-//        System.out.print(date);
+        System.out.print(date);
 
 
 //        try {

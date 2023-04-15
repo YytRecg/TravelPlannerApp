@@ -3,7 +3,6 @@ package com.example.myapplication2.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Patterns;
@@ -13,16 +12,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.myapplication2.R;
 import com.example.myapplication2.Utility;
 import com.example.myapplication2.ui.activity.TestActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 public class LoginFragment extends Fragment {
@@ -75,8 +71,9 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void createAccountInFirebase(String email, String password) {
+    private boolean createAccountInFirebase(String email, String password) {
         setProgressBarVisibility(true);
+        AtomicBoolean success = new AtomicBoolean(false);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -86,11 +83,13 @@ public class LoginFragment extends Fragment {
                     Utility.showToast(getActivity(), "Please verify your email!");
                     firebaseAuth.getCurrentUser().sendEmailVerification();
                     firebaseAuth.signOut();
+                    success.set(true);
                 } else {
                         Utility.showToast(getActivity(), task.getException().getLocalizedMessage());
                 }
             }
         );
+        return success.get();
     }
 
     private void onLoginAccount() {
@@ -129,15 +128,23 @@ public class LoginFragment extends Fragment {
         progressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private boolean validateData(String email, String password) {
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+    boolean validateData(String email, String password) {
+        if (!validateEmail(email)) {
             emailEt.setError("Email is invalid");
             return false;
         }
-        if (password.length() < 6) {
+        if (!validatePassword(password)) {
             passwordEt.setError("Password must be at least 6 characters");
             return false;
         }
         return true;
+    }
+
+    public static boolean validateEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public static boolean validatePassword(String password) {
+        return (password.length() >= 6);
     }
 }
