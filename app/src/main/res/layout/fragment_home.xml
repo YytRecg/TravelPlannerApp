@@ -1,171 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" >
 
-    <TextView
-        android:layout_width="match_parent"
+
+    <EditText
+        android:id="@+id/editTextDays"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="@string/current_location"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:paddingTop="0dp"
-        android:id="@+id/location" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/latitude"
-        android:layout_below="@+id/location"
-        android:textSize="25sp"
-        android:paddingTop="10dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:id="@+id/longitude" />
-
-    <TextView
-        android:id="@+id/latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/longitude"
-        android:layout_marginTop="5dp"
-        android:paddingStart="15dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="15dp"
-        android:text="@string/longitude"
-        android:textSize="25sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/address"
-        android:layout_below="@+id/latitude"
-        android:textSize="25sp"
-        android:paddingTop="10dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:id="@+id/address" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/city"
-        android:layout_below="@+id/address"
-        android:textSize="25sp"
-        android:paddingTop="10dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:id="@+id/city" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/country"
-        android:layout_below="@+id/city"
-        android:textSize="25sp"
-        android:paddingTop="10dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:id="@+id/country" />
-
-    <!-- separator -->
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:inputType="number"
+        android:hint="@string/numDays" />
 
     <Button
         android:id="@+id/location_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/country"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editTextDays"
+        android:layout_marginTop="10dp"
         android:text="@string/get_location" />
+
+
+    <ImageView
+        android:id="@+id/homeImageView1"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_below="@id/location_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:visibility="visible"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <ImageView
+        android:id="@+id/homeImageView2"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/homeImageView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        tools:src="@tools:sample/avatars" />
+
 
     <EditText
         android:id="@+id/editTextDestination"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/location_button"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="159dp"
-        android:layout_marginEnd="20dp"
-        android:autofillHints="@string/input_destination_autofill"
-        android:ems="15"
-        android:gravity="center"
-        android:hint="@string/input_destination"
-        android:inputType="textPersonName"
-        android:text="" />
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/homeImageView2"
+        android:layout_centerHorizontal="true"
+        android:hint="Image Tag" />
 
     <Button
         android:id="@+id/search_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextDestination"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/search" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="10dp"
+        android:text="@string/search"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editTextDestination" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/nextImgButton"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="362dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="455dp" />
-
-    <ImageView
-        android:id="@+id/homeImageView"
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
-
-        android:layout_above="@+id/location_button"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="89dp"
-        android:layout_marginTop="333dp"
-        android:layout_marginEnd="89dp"
-        android:layout_marginBottom="-223dp"
-        android:visibility="visible"
-        tools:src="@tools:sample/avatars" />
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_below="@id/location_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:visibility="invisible"/>
 
     <Button
-        android:id="@+id/nextImgButton"
-        android:layout_width="match_parent"
+        android:id="@+id/detectButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/homeImageView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-
-        android:layout_marginStart="185dp"
-        android:layout_marginTop="223dp"
-        android:layout_marginEnd="188dp"
-        android:text="🔍"/>
-
-
-    <!--    <com.google.android.material.textfield.TextInputLayout-->
-    <!--        android:id="@+id/textInputLayout"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content">-->
-
-    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+        android:text="@string/detect"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/editTextDestination"
+        android:layout_marginLeft="10dp"
+        android:visibility="invisible"
+        android:layout_toEndOf="@id/search_button"/>
 
 </RelativeLayout>

@@ -49,13 +49,26 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
+    private boolean checkInternet(){
+        boolean connected = true;
+        if (!Utility.isNetworkConnected(this.getActivity())) {
+            Utility.showDialog(this.getActivity(),"Error", "No Internet!");
+            connected = false;
+        }
+        return connected;
+    }
+
     private void onCreateAccount() {
-        String email = emailEt.getText().toString();
-        String password = passwordEt.getText().toString();
+        if (checkInternet()) {
+            String email = emailEt.getText().toString();
+            String password = passwordEt.getText().toString();
 
-        if (!validateData(email, password)) {return;}
+            if (!validateData(email, password)) {
+                return;
+            }
 
-        createAccountInFirebase(email, password);
+            createAccountInFirebase(email, password);
+        }
     }
 
     private boolean createAccountInFirebase(String email, String password) {
@@ -80,12 +93,16 @@ public class LoginFragment extends Fragment {
     }
 
     private void onLoginAccount() {
-        String email = emailEt.getText().toString();
-        String password = passwordEt.getText().toString();
+        if (checkInternet()) {
+            String email = emailEt.getText().toString();
+            String password = passwordEt.getText().toString();
 
-        if (!validateData(email, password)) {return;}
+            if (!validateData(email, password)) {
+                return;
+            }
 
-        loginAccountInFirebase(email, password);
+            loginAccountInFirebase(email, password);
+        }
     }
 
     private void loginAccountInFirebase(String email, String password) {
