@@ -26,10 +26,17 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class FlickrAPI {
     // wrapper class for all of our Flickr API related members
-
     static final String BASE_URL = "https://api.flickr.com/services/rest";
-    static final String API_KEY = "d52bdd36015b29a7208efbb782c15875"; //bad practice: better to fetch from server
+    static final String API_KEY = BuildConfig.FLICKR_KEY; //bad practice: better to fetch from server
     static final String TAG = "FlickrTag";
+
+    private final int numPerPage = 10;
+
+    public static void setPage(int page) {
+        FlickrAPI.page = page;
+    }
+
+    static int page = 1;
 
     HomeFragment homeFragment;
     String TAG_NAME = "";
@@ -54,6 +61,9 @@ public class FlickrAPI {
         url += "?method=flickr.photos.search";
         url += "&api_key=" + API_KEY;
         url += "&tags=" + TAG_NAME;
+        url += "&per_page=" + numPerPage;
+        url += "&page=" + page;
+
         url += "&format=json";
         url += "&nojsoncallback=1";
         url += "&extras=date_taken,url_h";
@@ -102,22 +112,25 @@ public class FlickrAPI {
                 }
 
             } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
+                Utility.showDialog(homeFragment.getActivity(), "Error", "No Internet");
+//                throw new RuntimeException(e);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+                Utility.showDialog(homeFragment.getActivity(), "Error", "No Internet");
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+//                throw new RuntimeException(e);
+                Utility.showDialog(homeFragment.getActivity(), "Error", "No Internet");
             }
 
             return LMPhotoList;
         }
 
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-////            ProgressBar progressBar = homeFragment.getActivity().findViewById(R.id.progressBar);
-////            progressBar.setVisibility(View.VISIBLE);
-//        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ProgressBar progressBar = homeFragment.getActivity().findViewById(R.id.progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         private LMPhoto parseLMPhoto(JSONObject singlePhoto){
             LMPhoto lmPhoto = null;
@@ -138,7 +151,7 @@ public class FlickrAPI {
             super.onPostExecute(lmPhotos);
             Log.d(TAG, "onPostExe: "+lmPhotos.size());
             homeFragment.receivedLMPhotos(lmPhotos);
-            ProgressBar progressBar = homeFragment.getActivity().findViewById(R.id.progressBar);
+            ProgressBar progressBar = homeFragment.getActivity().findViewById(R.id.progress_bar);
             progressBar.setVisibility(View.GONE);
         }
     }

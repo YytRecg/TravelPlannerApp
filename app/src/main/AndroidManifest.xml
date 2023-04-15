@@ -41,7 +41,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.GptActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ui.activity.LoginActivity" />
     </application>
 
 </manifest>

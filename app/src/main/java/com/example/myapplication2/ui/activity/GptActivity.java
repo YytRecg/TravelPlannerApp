@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.myapplication2.BuildConfig;
+import com.example.myapplication2.FlickrAPI;
 import com.example.myapplication2.R;
 import com.example.myapplication2.TravelPlanData;
 import com.example.myapplication2.UserData;
@@ -45,7 +48,17 @@ public class GptActivity extends AppCompatActivity {
 
     private ActivityGptBinding binding;
     private TextView gptTextView;
-    private int days = 7;
+    private Button saveButton;
+
+    public static int getDays() {
+        return days;
+    }
+
+    public static void setDays(int days) {
+        GptActivity.days = days;
+    }
+
+    public static int days = 7;
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
@@ -59,6 +72,9 @@ public class GptActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         gptTextView = binding.gptText;
         gptTextView.setMovementMethod(new ScrollingMovementMethod());
+        saveButton = binding.planSaveButton;
+        saveButton.setVisibility(View.INVISIBLE);
+        saveButton.setEnabled(false);
 
         // Things for store travel plan
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -76,9 +92,13 @@ public class GptActivity extends AppCompatActivity {
                     "Location:\n" +
                     "Summary:";
             callGPTApi(question);
-            String res = gptTextView.getText().toString();
-            // Things to store travel plans
-            writeTravelPlans(myRef, Uid, area, res);
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    writeTravelPlans(myRef, Uid, area, gptTextView.getText().toString());
+                    Utility.showDialog(GptActivity.this, "Notification","Travel plan added!");
+                }
+            });
         } else {
             Log.d("D_gpt", "no extras");
         }
@@ -118,6 +138,15 @@ public class GptActivity extends AppCompatActivity {
                         String res = jsonArr.getJSONObject(0).getString("text");
                         Log.d("D_GPT", res);
                         runOnUiThread(() -> gptTextView.setText(res));
+                        // Update the UI on the main thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Set the visibility of the button to "visible"
+                                saveButton.setVisibility(View.VISIBLE);
+                                saveButton.setEnabled(true);
+                            }
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                         throw new RuntimeException(e);

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.myapplication2.R;
+import com.example.myapplication2.Utility;
 import com.example.myapplication2.ui.fragment.LoginFragment;
 
 public class LoginActivity extends AppCompatActivity {

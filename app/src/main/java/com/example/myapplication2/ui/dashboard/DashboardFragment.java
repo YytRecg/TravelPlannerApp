@@ -275,6 +275,4 @@ public class DashboardFragment extends Fragment implements RecyclerViewInterface
 //    public void onDetach() {
 //        Log.i("D_LIFECYCLE", FRAGMENT_NAME +" onDetach");
 //        super.onDetach();
-//    }
-
 }

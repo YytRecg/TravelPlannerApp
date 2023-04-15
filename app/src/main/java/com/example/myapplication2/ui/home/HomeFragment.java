@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -26,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.myapplication2.FlickrAPI;
 import com.example.myapplication2.LMPhoto;
 import com.example.myapplication2.R;
@@ -50,16 +54,17 @@ import java.util.*;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    // Things for image generator
-    ImageView lmImageView;
+    private ImageView lmImageView1, lmImageView2;
+    private Button locationButton, searchButton, detectButton;
+    private EditText userDestination, numDays;
+    private int page = 1;
 
     List<LMPhoto> lmPhotoList;
     int currPhotoIdx = -1;
 
     // Thingies for get location
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private TextView longitude, latitude, address, city, country;
-    private Button locationButton;
+//    private TextView longitude, latitude, address, city, country;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -71,12 +76,15 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final Button searchButton = binding.searchButton;
-        final Button nextImgButton = binding.nextImgButton;
-        final EditText userDestination = binding.editTextDestination;
+        searchButton = binding.searchButton;
+        detectButton = binding.detectButton;
+//        final Button nextImgButton = binding.nextImgButton;
+        userDestination = binding.editTextDestination;
+        numDays = binding.editTextDays;
 
         // Things for image generator
-        lmImageView = binding.homeImageView;
+        lmImageView1 = binding.homeImageView1;
+        lmImageView2 = binding.homeImageView2;
 //        FlickrAPI flickrAPI = new FlickrAPI(this);
 //        flickrAPI.fetchLMImages();
 
@@ -95,26 +103,46 @@ public class HomeFragment extends Fragment {
 //        });
 //
         searchButton.setOnClickListener((View v) -> {
-            FlickrAPI flickrAPI = new FlickrAPI(this, userDestination.getText().toString());
-            flickrAPI.fetchLMImages();
+            if (!Utility.isNetworkConnected(this.getActivity())) {
+                Utility.showDialog(this.getActivity(),"Error", "No Internet!");
+            }else{
+                FlickrAPI.setPage(page);
+                FlickrAPI flickrAPI = new FlickrAPI(this, userDestination.getText().toString());
+                flickrAPI.fetchLMImages();
+            }
         });
 
-        nextImgButton.setOnClickListener((View v) -> {
-            nextPhoto();
+        lmImageView1.setOnClickListener((View v) -> {
+            if (lmPhotoList != null && lmPhotoList.size() > 0) {
+                currPhotoIdx++;
+                if (currPhotoIdx >= lmPhotoList.size()) {
+                    page++;
+                    FlickrAPI.setPage(page);
+                    FlickrAPI flickrAPI = new FlickrAPI(this, userDestination.getText().toString());
+                    flickrAPI.fetchLMImages();
+                } else {
+                    nextPhoto1();
+                }
+            }
+
         });
+
 
         // Thingies for get location
-        longitude = binding.longitude;
-        latitude = binding.latitude;
-        address = binding.address;
-        city = binding.city;
-        country = binding.country;
+//        longitude = binding.longitude;
+//        latitude = binding.latitude;
+//        address = binding.address;
+//        city = binding.city;
+//        country = binding.country;
         locationButton = binding.locationButton;
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
         locationButton.setOnClickListener(v -> {
-
-            getLastLocation();
+            if (!Utility.isNetworkConnected(this.getActivity())) {
+                Utility.showDialog(this.getActivity(),"Error", "No Internet!");
+            }else {
+                getLastLocation();
+            }
         });
 
         return root;
@@ -122,27 +150,30 @@ public class HomeFragment extends Fragment {
 
     public void receivedLMPhotos(List<LMPhoto> lmPhotoList) {
         this.lmPhotoList = lmPhotoList;
-        nextPhoto();
-    }
-
-    private void nextPhoto() {
         if (lmPhotoList != null && lmPhotoList.size() > 0){
             currPhotoIdx++;
-            currPhotoIdx %= lmPhotoList.size();
-
-            LMPhoto lmPhoto = lmPhotoList.get(currPhotoIdx);
-
-//            Log.d("flickr", "current lmPhoto :"+lmPhoto.toString());
-            String imageUrl = lmPhoto.getPhotoURL();
-
-            Glide.with(this)
-                    .load(imageUrl)
-                    .centerCrop()
-                    .into(lmImageView);
-//            FlickrAPI flickrAPI = new FlickrAPI(this);
-//            flickrAPI.fetchPhotoBitmap(lmPhoto.getPhotoURL());
+            nextPhoto1();
         }
     }
+
+    private void nextPhoto1() {
+//        if (lmPhotoList != null && lmPhotoList.size() > 0){
+//            currPhotoIdx++;
+            currPhotoIdx %= lmPhotoList.size();
+                LMPhoto lmPhoto = lmPhotoList.get(currPhotoIdx);
+
+//            Log.d("flickr", "current lmPhoto :"+lmPhoto.toString());
+                String imageUrl = lmPhoto.getPhotoURL();
+
+                Glide.with(this)
+                        .load(imageUrl)
+                        .centerCrop()
+                        .into(lmImageView1);
+
+//            FlickrAPI flickrAPI = new FlickrAPI(this);
+//            flickrAPI.fetchPhotoBitmap(lmPhoto.getPhotoURL());
+            }
+//        }
 
 //    private void openUnsplashPage(){
 //        Intent i = new Intent(getView().getContext(), UnsplashAuthActivity.class);
@@ -162,11 +193,18 @@ public class HomeFragment extends Fragment {
                     Geocoder geocoder = new Geocoder(this.getActivity(), Locale.getDefault());
                     try {
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        longitude.setText("Longitude: " + addresses.get(0).getLongitude());
-                        latitude.setText("Latitude: " + addresses.get(0).getLatitude());
-                        address.setText("Address: " + addresses.get(0).getAddressLine(0));
-                        city.setText("City: " + addresses.get(0).getLocality());
-                        country.setText("Country: " + addresses.get(0).getCountryName());
+//                        longitude.setText("Longitude: " + addresses.get(0).getLongitude());
+//                        latitude.setText("Latitude: " + addresses.get(0).getLatitude());
+//                        address.setText("Address: " + addresses.get(0).getAddressLine(0));
+//                        city.setText("City: " + addresses.get(0).getLocality());
+//                        country.setText("Country: " + addresses.get(0).getCountryName());
+                        int days = 7;
+                        try {
+                            days = Integer.parseInt(numDays.getText().toString());
+                        } catch (NumberFormatException e){
+                            Utility.showDialog(this.getActivity(),"Warning","Invalid #Days!");
+                        }
+                        GptActivity.setDays(days);
                         Intent i = new Intent(this.getActivity(), GptActivity.class);
                         String state = addresses.get(0).getAdminArea();
                         String city = addresses.get(0).getLocality();
@@ -212,15 +250,6 @@ public class HomeFragment extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
         });
-    }
-
-    private void writeNewPost(DatabaseReference myRef, String userBio, String username, String photo) {
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/bio/", userBio);
-        childUpdates.put("/name/", username);
-        childUpdates.put("/photo/", photo);
-        myRef.push().updateChildren(childUpdates);
     }
 
     @IgnoreExtraProperties

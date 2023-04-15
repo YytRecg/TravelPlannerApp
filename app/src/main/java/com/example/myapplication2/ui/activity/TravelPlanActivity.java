@@ -32,4 +32,6 @@ public class TravelPlanActivity extends AppCompatActivity {
         travelPlanTextView.setMovementMethod(new ScrollingMovementMethod());
         travelPlanTextView.setText(travelPlanDetails);
     }
+
+
 }

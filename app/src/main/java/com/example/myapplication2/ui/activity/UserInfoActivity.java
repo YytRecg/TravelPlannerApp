@@ -18,6 +18,7 @@ import java.util.Map;
 import android.os.Bundle;
 
 import com.example.myapplication2.R;
+import com.example.myapplication2.Utility;
 import com.example.myapplication2.UserData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ValueEventListener;
+
+import okhttp3.internal.Util;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -65,9 +68,9 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 readUserInfo(myRef, Uid);
                 if (hasProfile[0]) {
-                    showDialog("Notification", "Changed profile!");
+                    Utility.showDialog(UserInfoActivity.this, "Notification", "Changed profile!");
                 } else {
-                    showDialog("Notification","Added profile!");
+                    Utility.showDialog(UserInfoActivity.this, "Notification","Added profile!");
                 }
             }
         });
@@ -138,15 +141,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
 
     }
-    private void showDialog(String title, String msg){
-        AlertDialog dialog = new AlertDialog.Builder(UserInfoActivity.this).setTitle(title).setMessage(msg).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).create();
-        dialog.show();
-    }
+
     private void readUserInfo(DatabaseReference myRef, String Uid){
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("users");
