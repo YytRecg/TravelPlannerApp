@@ -33,7 +33,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_travel_plans"
-        android:layout_width="270dp"
+        android:layout_width="310dp"
         android:layout_height="250dp"
         android:layout_marginTop="50dp"
         android:layout_below="@id/textViewBirthday"
