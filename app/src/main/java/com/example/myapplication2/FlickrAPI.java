@@ -63,10 +63,10 @@ public class FlickrAPI {
         url += "&tags=" + TAG_NAME;
         url += "&per_page=" + numPerPage;
         url += "&page=" + page;
-
+        url += "&has_geo=" + 1;
         url += "&format=json";
         url += "&nojsoncallback=1";
-        url += "&extras=date_taken,url_h";
+        url += "&extras=date_taken,url_h,geo";
 
 
         return url;
@@ -139,7 +139,9 @@ public class FlickrAPI {
                 String title = singlePhoto.getString("title");
                 String dateTaken = singlePhoto.getString("datetaken");
                 String photoURL = singlePhoto.getString("url_h");
-                lmPhoto = new LMPhoto(id, title, dateTaken, photoURL);
+                float lat = Float.parseFloat(singlePhoto.getString("latitude"));
+                float lon = Float.parseFloat(singlePhoto.getString("longitude"));
+                lmPhoto = new LMPhoto(id, title, dateTaken, photoURL, lat, lon);
             }
             catch (JSONException e){
                 // do nothing

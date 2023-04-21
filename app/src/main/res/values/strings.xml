@@ -21,7 +21,7 @@
     <string name="city">City</string>
     <string name="country">Country</string>
     <string name="get_location">Explore Nearby</string>
-    <string name="search">Search</string>
+    <string name="search">Travel inspirations</string>
     <string name="title_activity_gpt">GptActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -33,11 +33,13 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="loading">Loading... Please wait a second</string>
 
-    <string name="button_add_profile">Add Profile</string>
+    <string name="button_add_profile">Save</string>
     <string name="username">Username</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="no_user_profile_warning">No User Profile</string>
     <string name="edit_user_profile_button">Edit User Profile</string>
     <string name="detect">detect</string>
     <string name="numDays">#Days</string>
+    <string name="tag2">Hawaii</string>
+    <string name="tag1">Alps</string>
 </resources>
