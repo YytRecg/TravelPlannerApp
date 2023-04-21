@@ -4,61 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp">
 
 
-    <EditText
-        android:id="@+id/editTextDays"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+    <ImageView
+        android:id="@+id/homeImageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:inputType="number"
-        android:hint="@string/numDays" />
+        android:layout_marginTop="0dp"
+        android:clickable="true"
+        android:visibility="visible"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
     <Button
         android:id="@+id/location_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/editTextDays"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:text="@string/get_location" />
-
-
-    <ImageView
-        android:id="@+id/homeImageView1"
-        android:layout_width="400dp"
-        android:layout_height="300dp"
-        android:layout_below="@id/location_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:visibility="visible"
-        tools:src="@tools:sample/backgrounds/scenic" />
-
-    <ImageView
-        android:id="@+id/homeImageView2"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/homeImageView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:visibility="invisible"
-        tools:src="@tools:sample/avatars" />
-
 
     <EditText
         android:id="@+id/editTextDestination"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/homeImageView2"
+        android:layout_marginTop="400dp"
+        android:layout_below="@id/location_button"
         android:layout_centerHorizontal="true"
-        android:hint="Image Tag" />
+        android:hint="Where to go" />
 
     <Button
         android:id="@+id/search_button"
@@ -79,15 +55,53 @@
         android:layout_marginTop="150dp"
         android:visibility="invisible"/>
 
-    <Button
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/detectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/detect"
+        android:clickable="true"
+        app:srcCompat="@drawable/img"
         android:layout_marginTop="10dp"
-        android:layout_below="@id/editTextDestination"
+        android:layout_below="@id/search_button"
         android:layout_marginLeft="10dp"
         android:visibility="invisible"
-        android:layout_toEndOf="@id/search_button"/>
+        android:layout_centerHorizontal="true" />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/search_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tag1"
+            android:textColor="@color/common_google_signin_btn_text_light" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tag2"
+            android:textColor="@color/common_google_signin_btn_text_light" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chongqing"
+            android:textColor="@color/common_google_signin_btn_text_light" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City View"
+            android:textColor="@color/common_google_signin_btn_text_light" />
+
+    </com.google.android.material.chip.ChipGroup>
+
 
 </RelativeLayout>

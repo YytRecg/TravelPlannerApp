@@ -3,12 +3,15 @@ package com.example.myapplication2.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication2.BuildConfig;
 import com.example.myapplication2.FlickrAPI;
@@ -17,12 +20,26 @@ import com.example.myapplication2.TravelPlanData;
 import com.example.myapplication2.UserData;
 import com.example.myapplication2.Utility;
 import com.example.myapplication2.databinding.ActivityGptBinding;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,11 +61,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class GptActivity extends AppCompatActivity {
+public class GptActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     private ActivityGptBinding binding;
     private TextView gptTextView;
     private Button saveButton;
+    private boolean ifPermissionGranted;
+    private MapView mapView;
+    private GoogleMap mMap;
+    private double mLatitude = 37.7749; // example latitude
+    private double mLongitude = -122.4194; // example longitude
+    private Marker mMarker;
 
     public static int getDays() {
         return days;
@@ -86,8 +109,20 @@ public class GptActivity extends AppCompatActivity {
 
         if (extras != null) {
             Log.d("D_gpt", "yes extras");
+            // map view
+            mLatitude = extras.getDouble("lat");
+            mLongitude = extras.getDouble("lon");
+            Log.d("D_location", "lat/lon: "+mLatitude+"/"+mLongitude);
+            mapView = binding.mapView;
+            checkMyPermission();
+            if (ifPermissionGranted) {
+                mapView.getMapAsync(this);
+                mapView.onCreate(savedInstanceState);
+
+            }
+            // travel plan recommendation
             String area = extras.getString("area");
-            String question = "In the following format, generate a "+Integer.toString(days)+" day travel plan for " + area + ".\n" +
+            String question = "In the following format, generate a " + Integer.toString(days) + " day travel plan for " + area + ".\n" +
                     "Day:\n" +
                     "Location:\n" +
                     "Summary:";
@@ -96,12 +131,35 @@ public class GptActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     writeTravelPlans(myRef, Uid, area, gptTextView.getText().toString());
-                    Utility.showDialog(GptActivity.this, "Notification","Travel plan added!");
+                    Toast.makeText(GptActivity.this, "Travel plan added!", Toast.LENGTH_SHORT).show();
+//                    Utility.showDialog(GptActivity.this, "Notification","Travel plan added!");
                 }
             });
         } else {
             Log.d("D_gpt", "no extras");
         }
+
+    }
+
+    private void checkMyPermission() {
+        Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+//                Toast.makeText(GptActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                ifPermissionGranted = true;
+            }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                permissionToken.continuePermissionRequest();
+
+            }
+        }).check();
     }
 
     private void callGPTApi(String question) {
@@ -125,6 +183,7 @@ public class GptActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.d("D_GPT", e.getMessage());
+                gptTextView.setText("Timeout, please try again:( (try a shorter plan)");
             }
 
             @Override
@@ -215,5 +274,57 @@ public class GptActivity extends AppCompatActivity {
 
         Map<String, TravelPlanData> childUpdates = new HashMap<>();
         myRef.child(Uid).child(Pid).setValue(new TravelPlanData(days, dest, plans));
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker at the specified location and move the camera
+        LatLng location = new LatLng(mLatitude, mLongitude);
+        mMarker = mMap.addMarker(new MarkerOptions().position(location));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 }

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/travelPlanImage"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginRight="10dp"
         android:layout_centerVertical="true"/>
 
@@ -26,14 +26,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="#days"
-        android:textSize="8dp"
+        android:textSize="15dp"
         android:layout_toEndOf="@id/travelPlanImage"
-        android:layout_below="@id/destination"/>
+        android:layout_below="@id/destination"
+        android:layout_marginTop="5dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/travelPlanImage"
         android:layout_marginTop="10dp"
-        android:background="@color/teal_200"/>
+        android:background="#8FCAD1"/>
 
 </RelativeLayout>

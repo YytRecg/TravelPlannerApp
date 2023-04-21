@@ -5,14 +5,27 @@ public class LMPhoto {
     String title;
     String dateTaken;
     String photoURL;
+
+    public float getLat() {
+        return lat;
+    }
+
+    public float getLon() {
+        return lon;
+    }
+
+    float lat;
+    float lon;
 //    String geoInfo;
 
 
-    public LMPhoto(String id, String title, String dateTaken, String photoURL) {
+    public LMPhoto(String id, String title, String dateTaken, String photoURL, float lat, float lon) {
         this.id = id;
         this.title = title;
         this.dateTaken = dateTaken;
         this.photoURL = photoURL;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     @Override
