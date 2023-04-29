@@ -5,5 +5,4 @@ The project for OSU CSE5236
 This project takes user image as input and detect landmarks within the image, including popular natural and human-made structures. Besides, the color properties of the image will be analyzed and generate a distribution of dominant colors.
 
 ### Sample Result
-![](Screenshots/Screenshot_20230421_133118.png)
-![](Screenshots/Screenshot_20230421_133147.png)
+![](Screenshots/Screenshot_20230421_133118.png)![](Screenshots/Screenshot_20230421_133147.png)
