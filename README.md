@@ -6,3 +6,4 @@ This project takes user image as input and detect landmarks within the image, in
 
 ### Sample Result
 ![](Screenshots/Screenshot_20230421_133118.png)
+![](Screenshots/Screenshot_20230421_133147.png)
