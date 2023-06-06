@@ -1,8 +1,8 @@
 # TravelPlannerApp
-The project for OSU CSE5236
 
 ### Introduction
-This project takes user image as input and detect landmarks within the image, including popular natural and human-made structures. Besides, the color properties of the image will be analyzed and generate a distribution of dominant colors.
+This app aims to use real photos to give users a constant flow of travel inspiration and assist to generate and store travel plan with just one click.
+
 
 ### Sample Result
 ![](Screenshots/combine1.jpeg)
